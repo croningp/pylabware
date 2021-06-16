@@ -26,3 +26,6 @@ from .devices.tricontinent_c3000 import C3000SyringePump
 
 # Vacuubrand
 from .devices.vacuubrand_cvc_3000 import CVC3000VacuumPump
+
+# PL Power Supply
+from .devices.pl_power_supply import PLPowerSupply
