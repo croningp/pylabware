@@ -1,0 +1,980 @@
+{
+  "x-generator": "NSwag v13.0.4.0 (NJsonSchema v10.0.21.0 (Newtonsoft.Json v11.0.0.0))",
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Pure C-8xx OpenInterface",
+    "description": "This is an expermental version for BUCHI's Pure\r\n    Chromatography systems that provides the low level access as required by\r\n    Cronin Group's Chemputer project at University of Glasgow.",
+    "contact": {
+      "name": "BUCHI DigitalLab",
+      "email": "digitallab@buchi.com"
+    },
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080"
+    }
+  ],
+  "paths": {
+    "/api/v1/Info": {
+      "get": {
+        "tags": [
+          "Info"
+        ],
+        "operationId": "Info_Get",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Info"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/Process": {
+      "get": {
+        "tags": [
+          "Process"
+        ],
+        "operationId": "Process_Get",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Process"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Process"
+        ],
+        "operationId": "Process_Update",
+        "requestBody": {
+          "x-name": "p",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Process"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/Process/sensors/zero": {
+      "put": {
+        "tags": [
+          "Process"
+        ],
+        "operationId": "Process_ZeroSensors",
+        "requestBody": {
+          "x-name": "sensors",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SensorList"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/Process/uvDetector/baseline": {
+      "put": {
+        "tags": [
+          "Process"
+        ],
+        "operationId": "Process_UvBaseline",
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/v1/Process/elsdDetector/baseline": {
+      "put": {
+        "tags": [
+          "Process"
+        ],
+        "operationId": "Process_ElsdBaseline",
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Info": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "systemClass": {
+            "type": "string",
+            "readOnly": true,
+            "nullable": true
+          },
+          "systemLine": {
+            "type": "string",
+            "readOnly": true,
+            "nullable": true
+          },
+          "systemName": {
+            "type": "string",
+            "readOnly": true,
+            "nullable": true
+          },
+          "systemModel": {
+            "type": "string",
+            "readOnly": true,
+            "nullable": true
+          },
+          "detectors": {
+            "type": "array",
+            "readOnly": true,
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/DetectorInfo"
+            }
+          },
+          "pump": {
+            "readOnly": true,
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/PumpInfo"
+              }
+            ]
+          },
+          "fractionCollector": {
+            "readOnly": true,
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/FractionCollectorInfo"
+              }
+            ]
+          },
+          "column": {
+            "readOnly": true,
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ColumnInfo"
+              }
+            ]
+          }
+        }
+      },
+      "DetectorInfo": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "detType": {
+            "$ref": "#/components/schemas/DetectorType"
+          },
+          "serial": {
+            "type": "string",
+            "nullable": true
+          },
+          "firmware": {
+            "type": "string",
+            "nullable": true
+          },
+          "hardware": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "DetectorType": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "ELSD",
+          "UV"
+        ],
+        "enum": [
+          "ELSD",
+          "UV"
+        ]
+      },
+      "PumpInfo": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "pumpType": {
+            "$ref": "#/components/schemas/PumpType"
+          },
+          "firmware": {
+            "type": "string",
+            "nullable": true
+          },
+          "hardware": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "PumpType": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Flash",
+          "Prep"
+        ],
+        "enum": [
+          "Flash",
+          "Prep"
+        ]
+      },
+      "FractionCollectorInfo": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "firmware": {
+            "type": "string",
+            "nullable": true
+          },
+          "trays": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/FractionCollectorTray"
+            }
+          }
+        }
+      },
+      "FractionCollectorTray": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "trayType": {
+            "type": "string",
+            "nullable": true
+          },
+          "calibrationPositions": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        }
+      },
+      "ColumnInfo": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "version": {
+            "type": "string",
+            "nullable": true
+          },
+          "columnName": {
+            "type": "string",
+            "nullable": true
+          },
+          "data": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Process": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "runningState": {
+            "readOnly": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/RunningState"
+              }
+            ]
+          },
+          "runMode": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/RunMode"
+              }
+            ]
+          },
+          "sensors": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SensorData"
+              }
+            ]
+          },
+          "airSystem": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AirSystemData"
+              }
+            ]
+          },
+          "elsdDetector": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ElsdDetectorData"
+              }
+            ]
+          },
+          "fractionCollector": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/FractionCollectorData"
+              }
+            ]
+          },
+          "solventSystem": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SolventSystemData"
+              }
+            ]
+          },
+          "uvDetector": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/UvDetectorData"
+              }
+            ]
+          }
+        }
+      },
+      "RunningState": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Idle",
+          "Preparing",
+          "Separating",
+          "Cleaning"
+        ],
+        "enum": [
+          "Idle",
+          "Preparing",
+          "Separating",
+          "Cleaning"
+        ]
+      },
+      "RunMode": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Flash",
+          "Prep"
+        ],
+        "enum": [
+          "Flash",
+          "Prep"
+        ]
+      },
+      "SensorData": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "solventPressureAfterPump": {
+            "type": "number",
+            "readOnly": true,
+            "format": "double"
+          },
+          "solventPressureAfterColumn": {
+            "type": "number",
+            "readOnly": true,
+            "format": "double"
+          },
+          "airPressureNebulizer": {
+            "type": "number",
+            "readOnly": true,
+            "format": "double"
+          },
+          "airPressureInlet": {
+            "type": "number",
+            "readOnly": true,
+            "format": "double"
+          },
+          "vaporLevel": {
+            "type": "integer",
+            "readOnly": true
+          },
+          "solventLevels": {
+            "type": "array",
+            "readOnly": true,
+            "nullable": true,
+            "items": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          "wasteLevel": {
+            "type": "number",
+            "readOnly": true,
+            "format": "double"
+          }
+        }
+      },
+      "AirSystemData": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isEnabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "valvePos": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AirValvePos"
+              }
+            ]
+          }
+        }
+      },
+      "AirValvePos": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Off",
+          "Elsd",
+          "Column"
+        ],
+        "enum": [
+          "Off",
+          "Elsd",
+          "Column"
+        ]
+      },
+      "ElsdDetectorData": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "laserIsEnabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "laserVoltage": {
+            "type": "number",
+            "readOnly": true,
+            "format": "double"
+          },
+          "shuttleValveIsEnabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "carrierFlowIsEnabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "sensitivity": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Sensitivity"
+              }
+            ]
+          },
+          "signal": {
+            "readOnly": true,
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ElsdSignal"
+              }
+            ]
+          }
+        }
+      },
+      "Sensitivity": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Low",
+          "High"
+        ],
+        "enum": [
+          "Low",
+          "High"
+        ]
+      },
+      "ElsdSignal": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "timeSinceStart": {
+            "type": "string",
+            "format": "time-span"
+          },
+          "signal": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "FractionCollectorData": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "position": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/FcPosition"
+              }
+            ]
+          },
+          "collectionTask": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/CollectionTask"
+              }
+            ]
+          }
+        }
+      },
+      "FcPosition": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "tray": {
+            "$ref": "#/components/schemas/FcTray"
+          },
+          "vial": {
+            "$ref": "#/components/schemas/FcVial"
+          }
+        }
+      },
+      "FcTray": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Left",
+          "Right",
+          "Unknown"
+        ],
+        "enum": [
+          "Left",
+          "Right",
+          "Unknown"
+        ]
+      },
+      "FcVial": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Unknown",
+          "Home"
+        ],
+        "enum": [
+          "Unknown",
+          "Home"
+        ]
+      },
+      "CollectionTask": {
+        "type": "object",
+        "x-abstract": true,
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "$ref": "#/components/schemas/CollectionAction"
+          }
+        }
+      },
+      "CollectionAction": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Waste",
+          "Vial"
+        ],
+        "enum": [
+          "Waste",
+          "Vial"
+        ]
+      },
+      "CollectionToWaste": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CollectionTask"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "CollectionToVial": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CollectionTask"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "time": {
+                "type": "integer"
+              }
+            }
+          }
+        ]
+      },
+      "SolventSystemData": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "flowIsEnabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "flowRate": {
+            "type": "integer",
+            "nullable": true
+          },
+          "solventMixture": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SolventMixture"
+              }
+            ]
+          },
+          "sampleInjectionValvePos": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SampleInjectionValvePos"
+              }
+            ]
+          },
+          "mode": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SolventSystemMode"
+              }
+            ]
+          }
+        }
+      },
+      "SolventMixture": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "line1Percentage": {
+            "type": "number",
+            "format": "double"
+          },
+          "line2Percentage": {
+            "type": "number",
+            "format": "double"
+          },
+          "line3Percentage": {
+            "type": "number",
+            "format": "double"
+          },
+          "line4Percentage": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "SampleInjectionValvePos": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Load",
+          "Separation"
+        ],
+        "enum": [
+          "Load",
+          "Separation"
+        ]
+      },
+      "SolventSystemMode": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Flash",
+          "Prep"
+        ],
+        "enum": [
+          "Flash",
+          "Prep"
+        ]
+      },
+      "UvDetectorData": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "absorbance": {
+            "readOnly": true,
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/UvAbsorbance"
+              }
+            ]
+          },
+          "wavelengths": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/UvWavelengths"
+              }
+            ]
+          },
+          "enabledChannels": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/UvEnabledChannels"
+              }
+            ]
+          },
+          "sensitivity": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Sensitivity"
+              }
+            ]
+          },
+          "spectrum": {
+            "readOnly": true,
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/UvSpectrum"
+              }
+            ]
+          }
+        }
+      },
+      "UvAbsorbance": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "timeSinceStart": {
+            "type": "string",
+            "format": "time-span"
+          },
+          "ch1": {
+            "type": "number",
+            "format": "double"
+          },
+          "ch2": {
+            "type": "number",
+            "format": "double"
+          },
+          "ch3": {
+            "type": "number",
+            "format": "double"
+          },
+          "ch4": {
+            "type": "number",
+            "format": "double"
+          },
+          "scan": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "UvWavelengths": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "ch1": {
+            "type": "integer"
+          },
+          "ch2": {
+            "type": "integer"
+          },
+          "ch3": {
+            "type": "integer"
+          },
+          "ch4": {
+            "type": "integer"
+          },
+          "scanStart": {
+            "type": "integer"
+          },
+          "scanEnd": {
+            "type": "integer"
+          }
+        }
+      },
+      "UvEnabledChannels": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "ch1": {
+            "$ref": "#/components/schemas/UvChannelState"
+          },
+          "ch2": {
+            "$ref": "#/components/schemas/UvChannelState"
+          },
+          "ch3": {
+            "$ref": "#/components/schemas/UvChannelState"
+          },
+          "ch4": {
+            "$ref": "#/components/schemas/UvChannelState"
+          },
+          "scan": {
+            "$ref": "#/components/schemas/UvChannelState"
+          }
+        }
+      },
+      "UvChannelState": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Off",
+          "On",
+          "Monitor"
+        ],
+        "enum": [
+          "Off",
+          "On",
+          "Monitor"
+        ]
+      },
+      "UvSpectrum": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "timeSinceStart": {
+            "type": "string",
+            "format": "time-span"
+          },
+          "values": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "number",
+              "format": "double"
+            }
+          }
+        }
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "additionalProperties": {
+          "nullable": true
+        },
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "SensorList": {
+        "type": "string",
+        "description": "",
+        "x-enumFlags": true,
+        "x-enumNames": [
+          "PumpSolventPressure",
+          "Solvent1Level",
+          "Solvent2Level",
+          "Solvent3Level",
+          "Solvent4Level",
+          "WasteLevel"
+        ],
+        "enum": [
+          "PumpSolventPressure",
+          "Solvent1Level",
+          "Solvent2Level",
+          "Solvent3Level",
+          "Solvent4Level",
+          "WasteLevel"
+        ]
+      }
+    }
+  }
+}
